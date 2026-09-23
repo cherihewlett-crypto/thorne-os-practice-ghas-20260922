@@ -1,0 +1,23 @@
+name: practice-d4
+on:
+  push:
+    paths:
+      - 'src/**'
+      - '.github/workflows/practice-d4.yml'
+  workflow_dispatch:
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report the trigger context
+        run: |
+          echo "event=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          echo "sha=${{ github.sha }}"
+  # A second job proving `needs` sequences jobs, and that a path filter gates the whole workflow.
+  after:
+    needs: observe
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "ran only because observe succeeded"
